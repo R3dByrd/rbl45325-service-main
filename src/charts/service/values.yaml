@@ -1,0 +1,21 @@
+replicaCount: 3
+image: registry.cloud.hs-furtwangen.de/cnc/rbl45325-service:latest
+author: rbl45325
+servicePort: 8080
+port: 80
+
+mongodb:
+  podLabels:
+    author: rbl45325
+  extraFlags:
+    - "--wiredTigerEngineConfigString=log=(prealloc=false,file_max=20MB)"
+    - "--setParameter diagnosticDataCollectionEnabled=false"
+  auth:
+    enabled: false
+  persistence:
+    size: 512Mi
+  resources:
+    limits:
+      memory: 512Mi
+    requests:
+      memory: 512Mi

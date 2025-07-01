@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.author }}-service
+  labels:
+    app:    service
+    author: {{ .Values.author }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app:    service
+      author: {{ .Values.author }}
+  template:
+    metadata:
+      labels:
+        app:    service
+        author: {{ .Values.author }}
+    spec:
+      containers:
+      - name: service
+        image: "{{ .Values.image }}"
+        ports:
+        - containerPort: {{ .Values.servicePort }}
+        env:
+          - name: SPRING_DATA_MONGODB_HOST
+            value: {{ .Values.author }}-service-mongodb
+          - name: SPRING_RABBITMQ_HOST
+            value: rabbitmq.rabbitmq
+        livenessProbe:
+          initialDelaySeconds: 15
+          httpGet:
+            path: /{{ .Values.author }}/actuator/health/liveness
+            port: {{ .Values.servicePort }}
+        readinessProbe:
+          initialDelaySeconds: 15
+          httpGet:
+            path: /{{ .Values.author }}/actuator/health/readiness
+            port: {{ .Values.servicePort }}
+        resources:
+          requests:
+            memory: 32Mi
+          limits:
+            memory: 512Mi
+
+curl -X POST https://cloud.hs-furtwangen.de/rbl45325/users -H "Content-Type: application/json" -d '{"firstName":"Max","lastName":"Mustermann"}'

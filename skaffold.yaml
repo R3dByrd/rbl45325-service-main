@@ -1,0 +1,17 @@
+apiVersion: skaffold/v2beta23
+kind: Config
+metadata:
+  name: rbl45325-service
+build:
+  artifacts:
+  - image: registry.cloud.hs-furtwangen.de/cnc/rbl45325-service
+    jib:
+      args:
+        - -Dmaven.test.skip=true
+deploy:
+  helm:
+    releases:
+      - name: rbl45325-service
+        chartPath: src/charts/service
+        artifactOverrides:
+          image: registry.cloud.hs-furtwangen.de/cnc/rbl45325-service

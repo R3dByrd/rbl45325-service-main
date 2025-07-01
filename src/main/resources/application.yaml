@@ -1,0 +1,27 @@
+spring:
+  application:
+    name: service
+  rabbitmq:
+    port: 5672
+    username: cnc
+    password: cnc
+    virtual-host: /cnc
+    ssl:
+      enabled: false
+
+server:
+  servlet:
+    context-path: /rbl45325
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: info,health,prometheus
+  metrics:
+    tags:
+      application: rbl45325-service
+
+service:
+  backend: "http://localhost:8080/rbl45325"
+  routingKey: "rbl45325"

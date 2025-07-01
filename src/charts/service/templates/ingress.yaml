@@ -1,0 +1,16 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Values.author }}-ingress
+spec:
+  rules:
+    - host: cloud.hs-furtwangen.de
+      http:
+        paths:
+          - path: /{{ .Values.author }}
+            pathType: Prefix
+            backend:
+              service:
+                name: {{ .Values.author }}-service
+                port:
+                  number: {{ .Values.servicePort }}
